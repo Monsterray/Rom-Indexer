@@ -18,20 +18,12 @@ import java.util.Scanner;
  */
 public class PSXIndexer {
 	
-	public String fileNameIn;	//The input where roms should be looked for
-	public File folder;			//The File folder of the input location
-	public File statText;		//The file where all the stats are going to be placed
-	public FileOutputStream is;	
-	public OutputStreamWriter osw;
-	public Writer w;
-	public static long startTime;	//Start time for how long the program is running
-	public static long endTime;		//End time for program run time
-	public String fileTitle = "PSX Titles";	//Title of the file that will be created
+	Writer writer;		// This writes data to the file
+	long startTime;		// Start time for how long the program is running
+	long endTime;		// End time for program run time
+	public String fileTitle = "PSX Titles";	// Title of the file that will be created
 	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	public PSXIndexer(){
 		System.out.println("Initializing...");
 		PSXIndexer pullMovieNames = new PSXIndexer();
 
@@ -42,6 +34,34 @@ public class PSXIndexer {
 		endTime = System.currentTimeMillis();
 		long totalTime = (endTime - startTime) / 1000;
 		System.out.println("Finished in " + totalTime + "seconds!");
+	}
+	
+	/**
+	 * 
+	 */
+	public void run() throws IOException {
+		Scanner in = new Scanner(System.in);
+		System.out.println("Input file location: ");
+		String fileNameIn = in.nextLine();
+
+		System.out.println("Running...");
+		startTime = System.currentTimeMillis();
+
+		File statText = new File("./" + fileTitle + ".txt");
+		FileOutputStream is = new FileOutputStream(statText);
+		OutputStreamWriter osw = new OutputStreamWriter(is);
+		writer = new BufferedWriter(osw);
+		
+		outputInfo(fileNameIn);
+		writer.close();
+		in.close();
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new PSXIndexer();
 	}
 
 	/**
@@ -93,7 +113,7 @@ public class PSXIndexer {
 //				System.out.println("[DEBUG] This is vars[5]: " + vars[5]);
 
 				try {
-					w.write(vars[3] + "\t" + title + "\n");
+					writer.write(vars[3] + "\t" + title + "\n");
 				} catch (IOException e) {
 					System.out.println("[ERROR] There was an error writing to file!!");
 				}
@@ -118,27 +138,5 @@ public class PSXIndexer {
 			}
 		}
 		return output;
-	}
-	
-	/**
-	 * 
-	 */
-	public void run() throws IOException {
-		Scanner in = new Scanner(System.in);
-		System.out.println("Input file location: ");
-		fileNameIn = in.nextLine();
-
-		System.out.println("Running...");
-		startTime = System.currentTimeMillis();
-
-		folder = new File(fileNameIn);
-		statText = new File("./" + fileTitle + ".txt");
-		is = new FileOutputStream(statText);
-		osw = new OutputStreamWriter(is);
-		w = new BufferedWriter(osw);
-		
-		outputInfo(fileNameIn);
-		w.close();
-		in.close();
 	}
 }
