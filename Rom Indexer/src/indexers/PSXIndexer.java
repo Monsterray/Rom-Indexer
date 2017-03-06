@@ -23,12 +23,14 @@ public class PSXIndexer {
 	long endTime;		// End time for program run time
 	public String fileTitle = "PSX Titles";	// Title of the file that will be created
 	
+	/**
+	 * 
+	 */
 	public PSXIndexer(){
 		System.out.println("Initializing...");
-		PSXIndexer pullMovieNames = new PSXIndexer();
 
 		try {
-			pullMovieNames.run();
+			this.run();
 		} catch (IOException e) {e.printStackTrace();}
 		
 		endTime = System.currentTimeMillis();
@@ -65,7 +67,7 @@ public class PSXIndexer {
 	}
 
 	/**
-	 * @param location String
+	 * @param location The location 
 	 */
 	public void outputInfo(String location) {
 		File currentFolder = new File(location);
